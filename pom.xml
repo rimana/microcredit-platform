@@ -58,6 +58,12 @@
             <optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>net.sourceforge.tess4j</groupId>
+            <artifactId>tess4j</artifactId>
+            <version>5.8.0</version>
+        </dependency>
+
         <!-- ⭐⭐⭐ AJOUTEZ CES DÉPENDANCES JWT ⭐⭐⭐ -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>

@@ -65,6 +65,7 @@ public class WebSecurityConfig {
                 // Autorisations
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/ocr/**").permitAll()
                         .requestMatchers("/api/credit/**").authenticated()
                         .anyRequest().authenticated()
                 );
