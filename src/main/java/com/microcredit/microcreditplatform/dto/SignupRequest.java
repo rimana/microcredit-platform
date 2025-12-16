@@ -12,7 +12,8 @@ public class SignupRequest {
     private Boolean employed;
     private Double monthlyIncome;
     private String profession;
-    private User.Role role = User.Role.CLIENT;
+    private User.Role role = User.Role.CLIENT; // Par défaut CLIENT
+    private String adminSecret; // Champ secret pour créer un admin
 
     // Getters et Setters
     public String getUsername() { return username; }
@@ -43,5 +44,13 @@ public class SignupRequest {
     public void setProfession(String profession) { this.profession = profession; }
 
     public User.Role getRole() { return role; }
-    public void setRole(User.Role role) { this.role = role; }
+    public void setRole(User.Role role) {
+        // Validation du rôle
+        if (role != null) {
+            this.role = role;
+        }
+    }
+
+    public String getAdminSecret() { return adminSecret; }
+    public void setAdminSecret(String adminSecret) { this.adminSecret = adminSecret; }
 }

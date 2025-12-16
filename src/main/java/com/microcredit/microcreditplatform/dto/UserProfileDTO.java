@@ -1,53 +1,37 @@
-package com.microcredit.microcreditplatform.model;
+// UserProfileDTO.java
+package com.microcredit.microcreditplatform.dto;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "users")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(unique = true)
+public class UserProfileDTO {
     private String username;
-
-    @Column(unique = true)
     private String email;
-
-    private String password;
-
-    @Enumerated(EnumType.STRING)
-    private Role role;
-
     private String phone;
     private String cin;
     private String address;
-    private Boolean employed = false;
+    private Boolean employed;
     private Double monthlyIncome;
     private String profession;
 
-    public enum Role {
-        CLIENT, AGENT, ADMIN
+    // Constructeurs
+    public UserProfileDTO() {}
+
+    public UserProfileDTO(String username, String email, String phone, String cin,
+                          String address, Boolean employed, Double monthlyIncome, String profession) {
+        this.username = username;
+        this.email = email;
+        this.phone = phone;
+        this.cin = cin;
+        this.address = address;
+        this.employed = employed;
+        this.monthlyIncome = monthlyIncome;
+        this.profession = profession;
     }
 
-
-
     // Getters et Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
-
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
-
-    public Role getRole() { return role; }
-    public void setRole(Role role) { this.role = role; }
 
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
