@@ -2,6 +2,8 @@ package com.microcredit.microcreditplatform.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -26,6 +28,8 @@ public class User {
     private Boolean employed = false;
     private Double monthlyIncome;
     private String profession;
+
+
 
     public enum Role {
         CLIENT, AGENT, ADMIN

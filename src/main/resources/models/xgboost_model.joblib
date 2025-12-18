@@ -1,0 +1,29 @@
+# Dans votre notebook
+import joblib
+from xgboost import XGBClassifier
+import pandas as pd
+
+# 1. Charger vos données
+df = pd.read_excel(r"C:\Users\Hp\Downloads\Microcredit_Maroc_100%_RÉALISTE_2025.xlsx")
+
+# 2. Préparer les données
+df['défaut_90j'] = (df['défaut_90j'] > 0).astype(int)
+y = df['défaut_90j']
+X = df.drop(['id_client', 'défaut_90j'], axis=1, errors='ignore')
+X = pd.get_dummies(X, drop_first=True)
+
+# 3. Entraîner le modèle
+model = XGBClassifier(
+    n_estimators=600,
+    max_depth=6,
+    learning_rate=0.03,
+    subsample=0.8,
+    colsample_bytree=0.8,
+    random_state=42,
+    eval_metric='logloss'
+)
+model.fit(X, y)
+
+# 4. Sauvegarder le modèle
+joblib.dump(model, 'xgboost_model.joblib')
+print("✅ Modèle XGBoost sauvegardé")

@@ -11,23 +11,44 @@ import java.util.List;
 
 @Repository
 public interface CreditRequestRepository extends JpaRepository<CreditRequest, Long> {
+
+    // ==================== MÉTHODES EXISTANTES ====================
     List<CreditRequest> findByUser(User user);
     List<CreditRequest> findByStatus(CreditRequest.Status status);
-
-    // Compter le nombre de demandes par statut
     long countByStatus(CreditRequest.Status status);
-
-    // Compter le nombre de demandes par utilisateur
     long countByUser(User user);
-
-    // Récupérer les demandes d'un utilisateur par statut
     List<CreditRequest> findByUserAndStatus(User user, CreditRequest.Status status);
 
-    // Somme des montants par statut (retourne 0.0 si aucun)
     @Query("SELECT COALESCE(SUM(c.amount), 0.0) FROM CreditRequest c WHERE c.status = :status")
     Double sumAmountByStatus(@Param("status") CreditRequest.Status status);
 
-    // Récupérer toutes les demandes en joignant les utilisateurs pour éviter les lazy loads
     @Query("SELECT DISTINCT c FROM CreditRequest c JOIN FETCH c.user")
     List<CreditRequest> findAllWithUsers();
+
+    // ==================== MÉTHODES AJOUTÉES POUR CORRECTION ====================
+    List<CreditRequest> findByUserOrderByCreatedAtDesc(User user);
+    List<CreditRequest> findAllByOrderByCreatedAtDesc();
+    List<CreditRequest> findByStatusOrderByCreatedAtDesc(CreditRequest.Status status);
+
+    // ==================== NOUVELLES MÉTHODES POUR DASHBOARD ====================
+
+    // ✅ Pour récupérer les demandes EN ATTENTE AVEC SCORING (dashboard)
+    @Query("SELECT c FROM CreditRequest c WHERE c.status = 'PENDING' AND c.score IS NOT NULL ORDER BY c.createdAt DESC")
+    List<CreditRequest> findPendingWithScoring();
+
+    // ✅ Pour récupérer TOUTES les demandes avec scoring
+    @Query("SELECT c FROM CreditRequest c WHERE c.score IS NOT NULL ORDER BY c.createdAt DESC")
+    List<CreditRequest> findAllWithScoring();
+
+    // ✅ Pour récupérer les demandes par niveau de risque
+    @Query("SELECT c FROM CreditRequest c WHERE c.riskLevel = :riskLevel ORDER BY c.createdAt DESC")
+    List<CreditRequest> findByRiskLevel(@Param("riskLevel") String riskLevel);
+
+    // ✅ Pour statistiques du dashboard
+    @Query("SELECT COUNT(c) as total, " +
+            "AVG(c.score) as avgScore, " +
+            "MIN(c.score) as minScore, " +
+            "MAX(c.score) as maxScore " +
+            "FROM CreditRequest c WHERE c.score IS NOT NULL")
+    Object[] getDashboardStats();
 }
